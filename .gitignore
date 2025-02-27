@@ -3,6 +3,13 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+workflow_diagram.png
+resolution_report.md
+.langgraph_api/
+
+openapi_client/
+pyats_client/
+
 # C extensions
 *.so
 
