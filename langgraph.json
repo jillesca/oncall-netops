@@ -1,0 +1,14 @@
+{
+  "dockerfile_lines": [
+    "COPY pyats_server.json .",
+    "RUN ls -l && pwd && apt-get update && apt-get install -y openjdk-17-jdk wget && wget https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/7.11.0/openapi-generator-cli-7.11.0.jar -O openapi-generator-cli.jar && JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64 PATH=$JAVA_HOME/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin java -jar openapi-generator-cli.jar generate -i ./pyats_server.json -g python -o ./pyats_client --package-name pyats_client && pip install ./pyats_client"
+  ],
+  "graphs": {
+    "oncall-netops": "./graph.py:orchestrator_worker"
+  },
+  "env": "./.env",
+  "python_version": "3.11",
+  "dependencies": [
+    "."
+  ]
+}

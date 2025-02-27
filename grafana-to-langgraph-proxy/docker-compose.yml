@@ -1,0 +1,11 @@
+services:
+  grafana-langgraph-proxy:
+    build:
+      context: .
+    container_name: grafana-langgraph-proxy
+    ports:
+      - "${GRAFANA_TO_LANGGRAPH_PROXY_PORT}:${GRAFANA_TO_LANGGRAPH_PROXY_PORT}"
+    environment:
+      LANGGRAPH_API_ENDPOINT: ${LANGGRAPH_API_ENDPOINT}
+      LANGGRAPH_ASSISTANT_ID: ${LANGGRAPH_ASSISTANT_ID}
+      GRAFANA_TO_LANGGRAPH_PROXY_PORT: ${GRAFANA_TO_LANGGRAPH_PROXY_PORT}

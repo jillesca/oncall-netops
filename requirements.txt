@@ -1,0 +1,7 @@
+langchain_openai 
+langgraph-cli
+langgraph 
+langchain_core
+ipython
+pillow
+langgraph-api
