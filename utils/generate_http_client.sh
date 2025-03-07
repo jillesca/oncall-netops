@@ -14,7 +14,9 @@ fi
 
 echo "# Generating the HTTP client"
 
-docker run --rm -v ${PWD}:/local openapitools/openapi-generator-cli generate \
+DOCKER=$(command -v docker 2> /dev/null || echo podman)
+
+$DOCKER run --rm -v ${PWD}:/local openapitools/openapi-generator-cli generate \
     -i /local/"${HTTP_CLIENT_OPENAPI_FILE}" \
     -g python \
     -o /local/pyats_client \

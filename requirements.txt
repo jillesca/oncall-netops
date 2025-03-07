@@ -1,7 +1,7 @@
 langchain_openai 
-langgraph-cli
+langgraph-cli[inmem]
 langgraph 
 langchain_core
 ipython
 pillow
-langgraph-api
+langgraph-api==0.0.26 
