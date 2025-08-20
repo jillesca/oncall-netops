@@ -23,11 +23,9 @@ $DOCKER run --rm -v ${PWD}:/local openapitools/openapi-generator-cli generate \
     --package-name pyats_client
 
 echo "# Installing the HTTP client"
-cd pyats_client
-pip install .
+uv add ./pyats_client
 
 echo "# Checking the installed package"
-pip list | grep pyats-client
-cd -
+uv pip list | grep pyats-client
 
 echo "# Done generating the HTTP client"

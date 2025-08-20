@@ -4,6 +4,9 @@ export
 
 DOCKER := $(shell command -v docker 2> /dev/null || echo podman)
 
+sync-environment:
+	uv sync --frozen --no-dev
+
 build-proxy:
 	-$(MAKE) clean-proxy
 	$(DOCKER) compose --file grafana-to-langgraph-proxy/docker-compose.yml up --build --detach grafana-langgraph-proxy
@@ -20,6 +23,7 @@ clean-proxy:
 	-$(DOCKER) compose --file grafana-to-langgraph-proxy/docker-compose.yml rm -f grafana-langgraph-proxy
 
 build-environment:
+	$(MAKE) sync-environment
 	chmod +x utils/set_pythonpath.sh
 	chmod +x utils/generate_http_client.sh
 	$(MAKE) validate_env_vars
@@ -31,4 +35,7 @@ validate_env_vars:
 	./utils/validate_env_vars.sh
 
 run-environment:
-	langgraph dev --port $(LANGGRAPH_API_PORT)
+	uv run langgraph dev --port $(LANGGRAPH_API_PORT)
+
+rerun-environment:
+	uv run langgraph dev --no-browser --port $(LANGGRAPH_API_PORT)
