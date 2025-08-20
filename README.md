@@ -127,8 +127,6 @@ Ready!
 
 </details>
 
-Open the LangGraph Studio URL using Chrome (Firefox doesn't work).
-
 If you have issues with the web version make sure:
 
 - You are logged in langsmith.
