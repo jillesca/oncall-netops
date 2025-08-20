@@ -38,7 +38,8 @@ Short memory is implemented (per thread) that lets agents recall past investigat
 
 ## Requirements ⚠️
 
-- **Python 3.11** (Only for the _Langgraph Studio Desktop_ version).
+- **[uv](https://docs.astral.sh/uv/getting-started/installation/)** - Fast Python package manager and project manager. Install it following the [official installation guide](https://docs.astral.sh/uv/getting-started/installation/).
+- **Python 3.11+** (uv will manage the Python environment automatically).
 - **OpenAI Key**.
 - **Langsmith Key,** [Create a token](https://docs.smith.langchain.com/administration/how_to_guides/organization_management/create_account_api_key) and copy the langsmith env vars.
 - **pyATS Server URL**.
@@ -60,28 +61,33 @@ OPENAI_API_KEY=<openai_token>
 
 ## Setup 🛠️
 
-There are two options to run the graph.
+> [!NOTE]
+> Update: LangGraph Studio Desktop has been discontinued by LangChain. The only available option is now the LangGraph Server CLI with the web-based Studio interface.
 
-1. Run the langgraph server cli on the terminal, no container. You can use the web version of langgraph studio (a bit slower).
-2. Using the Langgraph Desktop version (Only Mac). Container based.
+Use the LangGraph Server CLI to run the server in the terminal and access the web version of LangGraph Studio through your browser.
 
 ### Set environment variables
 
-- `PYATS_API_SERVER`: Connects the Langgraph API server to the pyATS server. **You must set this environment variable.** Add it to an `.env` file. Default port in the `pyats_server` project is `57000`.
-- `LANGGRAPH_API_HOST`: Links the `grafana-to-langgraph-proxy` with the Langgraph API server. Defaults to `http://host.docker.internal:56000`, [adjust](.env.example#L4) if needed.
-
-| Scenario                                                                                                         | Variable             | Value                              |
-| ---------------------------------------------------------------------------------------------------------------- | -------------------- | ---------------------------------- |
-| `grafana-to-langgraph-proxy`, pyATS Server, and Langgraph API Server on the same host. Langgraph in a container. | `PYATS_API_SERVER`   | `http://host.docker.internal:PORT` |
-|                                                                                                                  | `LANGGRAPH_API_HOST` | `http://host.docker.internal:PORT` |
-| `grafana-to-langgraph-proxy`, pyATS Server, & Langgraph API Server on different hosts or not in containers       | `PYATS_API_SERVER`   | `http://<HOST_IP:PORT>`            |
-|                                                                                                                  | `LANGGRAPH_API_HOST` | `http://<HOST_IP:PORT>`            |
+- `PYATS_API_SERVER`
+  - Connects the Langgraph API server to the pyATS server.
+  - **You must set this environment variable.** Add it to an `.env` file.
+  - Default port in the `pyats_server` project is `57000`.
+- `LANGGRAPH_API_HOST`
+  - Links the `grafana-to-langgraph-proxy` with the Langgraph API server.
+  - Defaults to `http://host.docker.internal:56000`, [adjust](.env.example#L4) if needed.
 
 See the [.env.example](.env.example) file to find the rest of environment variables used. These are set by the [Makefile.](Makefile)
 
 ## Build 🏗️
 
-Validate and build the base environment. If an env var is missing, the script **fails.**
+Validate and build the base environment. This command will:
+
+1. Synchronize dependencies using the exact versions from the lockfile
+2. Validate environment variables
+3. Generate the pyATS HTTP client from the OpenAPI specification
+
+> [!NOTE]
+> If an env var is missing, the script **fails.**
 
 ```bash
 make build-environment
@@ -93,11 +99,11 @@ Start the `grafana-to-langgraph-proxy` component in a separate terminal. See [Ap
 make build-proxy
 ```
 
-### Option 1. Langgraph Server CLI 💻
+### Running LangGraph Server CLI 💻
 
-Install the dependencies listed on [the requirements file](requirements.txt), use a virtual environment if possible.
+Dependencies are automatically managed by `uv` during the build process.
 
-Start the server with.
+Start the server with:
 
 ```bash
 make run-environment
@@ -121,33 +127,12 @@ Ready!
 
 </details>
 
-Open the LangGraph Studio URL using Chrome (Firefox doesn't work).
-
 If you have issues with the web version make sure:
 
 - You are logged in langsmith.
 - Refresh your browser.
 
 If you don't want to use the web version, you can still see the operations in the terminal, but is hard to follow with so much output.
-
-### Option 2. Langgraph Studio Desktop 🍏
-
-[Download the desktop](https://studio.langchain.com/) version (only for Mac).
-
-_Before_ you start opening the project, **set the target port** in the bottom bar. This project uses port `56000`, if you set a different one, update the env var [LANGGRAPH_API_PORT](.env.example#L2)
-
-<p align="center">
-  <img src="img/select_port.png" alt="Select port" width="300">
-<p>
-
-On langgraph studio, select the project and open it. This imports the code from this repo and install everything in a dedicated container.
-
-<p align="center">
-  <img src="img/open_project.png" alt="Select project" width="300">
-<p>
-
-> [!NOTE]
-> Sometimes the build process fails. Restart or retry.
 
 ## Run 🚀
 
